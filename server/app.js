@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 
@@ -19,6 +19,7 @@ app.use(routes);
 app.use(errorHandler);
 
 app.listen(port, () => {
+  fs.mkdir('./logs', { recursive: true }, (err) => { if (err) throw err; });
   pool.getConnection((err, connection) => {
     if (err) {
       console.error('Error connecting to the database: ', err);
