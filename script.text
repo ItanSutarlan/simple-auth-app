@@ -1,0 +1,25 @@
+SELECT name, emotion AS mode_emotion, COUNT(*) AS mode_count
+FROM users u
+GROUP BY name, emotion
+HAVING COUNT(*) = (
+    SELECT MAX(cnt)
+    FROM (
+        SELECT name, emotion, COUNT(*) AS cnt
+        FROM users
+        WHERE name = u.name
+        GROUP BY emotion
+    ) AS subquery
+);
+
+SELECT name, created, AVG(score) AS average_score, emotion AS mode_emotion, COUNT(*) AS mode_count
+FROM users u
+GROUP BY name, created, emotion
+HAVING COUNT(*) = (
+    SELECT MAX(cnt)
+    FROM (
+        SELECT name, created, emotion, COUNT(*) AS cnt
+        FROM users
+        WHERE name = u.name AND created = u.created
+        GROUP BY emotion
+    ) AS subquery
+);
